@@ -2,7 +2,7 @@ export interface Project {
   id: string;
   title: string;
   subtitle: string;
-  category: 'Distributed Systems' | 'Cloud & Infra' | 'Full-Stack Web';
+  category: ProjectCategory;
   image: string;
   description: string;
   longDescription: string;
@@ -38,16 +38,57 @@ export interface Article {
   content: string[];
 }
 
+export interface ArchitectureSkillDomain {
+  domain: string;
+  lead: string;
+  skills: string[];
+}
+
+export interface ProfileStat {
+  label: string;
+  value: string;
+  detail: string;
+}
+
+export interface Profile {
+  name: string;
+  role: string;
+  kicker: string;
+  tagline: string;
+  email: string;
+  github: string;
+  linkedin: string;
+  location: string;
+  availability: string;
+  portrait: string;
+  stats: ProfileStat[];
+}
+
+/** Canonical project categories — filter tabs are derived from this list. */
+export const PROJECT_CATEGORIES = [
+  'Distributed Systems',
+  'Cloud & Infra',
+  'Full-Stack Web',
+] as const;
+
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
+/** Single source of truth for the profile identity fields reused below. */
+const NAME = 'Benjamin Boma';
+const EMAIL = 'benjaminboma25@gmail.com';
+const GITHUB_URL = 'https://github.com/benjaminboma';
+const LOCATION = 'San Francisco, CA · Remote';
+
 export const PORTFOLIO_DATA = {
   profile: {
-    name: 'Benjamin Boma',
+    name: NAME,
     role: 'Senior Software Engineer & Systems Architect',
     kicker: 'Software Engineering · Distributed Systems · Cloud Infrastructure',
     tagline: 'Designing resilient distributed architectures, high-throughput cloud streaming pipelines, and elegant full-stack digital products.',
-    email: 'benjaminboma25@gmail.com',
-    github: 'https://github.com/benjaminboma',
+    email: EMAIL,
+    github: GITHUB_URL,
     linkedin: 'https://linkedin.com/in/benjaminboma',
-    location: 'San Francisco, CA · Remote',
+    location: LOCATION,
     availability: 'Available for Staff / Senior Roles & Advisory',
     portrait: '/src/assets/images/benjamin_boma_portrait_1792394781626.jpg',
     stats: [
@@ -260,3 +301,12 @@ export const PORTFOLIO_DATA = {
     },
   ] as Article[],
 };
+
+/** Typed, stable accessor used across the app. */
+export const PORTFOLIO: {
+  profile: Profile;
+  projects: Project[];
+  architectureSkills: ArchitectureSkillDomain[];
+  experiences: Experience[];
+  articles: Article[];
+} = PORTFOLIO_DATA;

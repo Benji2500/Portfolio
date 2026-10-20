@@ -1,8 +1,9 @@
-import React from 'react';
-import { Briefcase, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import type { FC } from 'react';
+import { CheckCircle2 } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { DotSeparatedList } from './ui/DotSeparatedList';
 
-export const ExperienceSection: React.FC = () => {
+export const ExperienceSection: FC = () => {
   const { experiences } = PORTFOLIO_DATA;
 
   return (
@@ -63,15 +64,8 @@ export const ExperienceSection: React.FC = () => {
 
               {/* Technologies */}
               <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-400">
-                <span className="text-slate-400 uppercase text-[11px] mr-1">Stack:</span>
-                {exp.technologies.map((tech, tIdx) => (
-                  <React.Fragment key={tIdx}>
-                    <span className="text-slate-300">{tech}</span>
-                    {tIdx < exp.technologies.length - 1 && (
-                      <span className="text-slate-600" aria-hidden="true">·</span>
-                    )}
-                  </React.Fragment>
-                ))}
+                <span className="uppercase text-[11px] mr-1">Stack:</span>
+                <DotSeparatedList items={exp.technologies} itemClassName="text-slate-300" />
               </div>
             </div>
           ))}

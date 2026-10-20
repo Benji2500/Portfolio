@@ -1,24 +1,13 @@
-import React, { useState } from 'react';
-import {
-  Github,
-  Terminal,
-  Copy,
-  Check,
-  ExternalLink,
-  GitBranch,
-  CheckCircle2,
-  AlertCircle,
-  Play,
-  RotateCcw,
-  Sparkles,
-} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { X }
+// placeholder
 
 interface GitHubPushHubProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const GitHubPushHub: React.FC<GitHubPushHubProps> = ({ isOpen, onClose }) => {
+export const GitHubPushHub = ({ isOpen, onClose }: GitHubPushHubProps) => { = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState('benjaminboma');
   const [repoName, setRepoName] = useState('portfolio');
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -29,9 +18,9 @@ export const GitHubPushHub: React.FC<GitHubPushHubProps> = ({ isOpen, onClose })
   const [simulatedLogs, setSimulatedLogs] = useState<string[]>([]);
   const [simCompleted, setSimCompleted] = useState(false);
 
-  const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);

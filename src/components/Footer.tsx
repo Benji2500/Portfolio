@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowUp, Github, Mail, Globe, GitBranch } from 'lucide-react';
+import type { FC } from 'react';
+import { ArrowUp, Github, Mail, GitBranch } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 
 interface FooterProps {
@@ -7,7 +7,7 @@ interface FooterProps {
   onOpenContact: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenGitHubHub, onOpenContact }) => {
+export const Footer: FC<FooterProps> = ({ onOpenGitHubHub, onOpenContact }) => {
   const { profile } = PORTFOLIO_DATA;
 
   const scrollToTop = () => {

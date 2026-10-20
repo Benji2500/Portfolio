@@ -1,20 +1,18 @@
-import React from 'react';
-import { X, Download, Printer, Mail, MapPin, Globe, CheckCircle2 } from 'lucide-react';
+import { Printer, Mail, MapPin, Globe } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { ModalOverlay } from './ui/ModalOverlay';
 
 interface ResumeModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   const { profile, experiences, architectureSkills } = PORTFOLIO_DATA;
 
   if (!isOpen) return null;
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
