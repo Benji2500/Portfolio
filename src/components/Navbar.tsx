@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
-import { Menu, X, Github, ArrowUpRight, GitBranch } from 'lucide-react';
+import { Menu, X, GitBranch } from 'lucide-react';
 
 interface NavbarProps {
   onOpenContact: () => void;
   onOpenGitHubHub: () => void;
 }
 
+/** Single source of truth for the in-page anchor navigation. */
+const NAV_LINKS = [
+  { href: '#projects', label: 'Work', mobileLabel: 'Work & Projects' },
+  { href: '#architecture', label: 'Architecture', mobileLabel: 'Architecture & Stack' },
+  { href: '#experience', label: 'Experience', mobileLabel: 'Experience' },
+  { href: '#writings', label: 'Writings', mobileLabel: 'Writings' },
+] as const;
+
+const DESKTOP_LINK_CLASS =
+  'hover:text-white transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-4 decoration-cyan-400';
+
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#090b10]/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-6 py-4">
-        {/* Zone 1: Brand Wordmark (Single text element in display face, single line) */}
+        {/* Zone 1: Brand Wordmark */}
         <a
           href="#top"
           className="text-lg font-bold tracking-tight text-white transition-opacity hover:opacity-90 whitespace-nowrap shrink-0"
@@ -20,32 +33,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }
           Benjamin Boma
         </a>
 
-        {/* Zone 2: Navigation Links (4-5 single-line clean text links) */}
+        {/* Zone 2: Navigation Links */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
-          <a
-            href="#projects"
-            className="hover:text-white transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-4 decoration-cyan-400"
-          >
-            Work
-          </a>
-          <a
-            href="#architecture"
-            className="hover:text-white transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-4 decoration-cyan-400"
-          >
-            Architecture
-          </a>
-          <a
-            href="#experience"
-            className="hover:text-white transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-4 decoration-cyan-400"
-          >
-            Experience
-          </a>
-          <a
-            href="#writings"
-            className="hover:text-white transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-4 decoration-cyan-400"
-          >
-            Writings
-          </a>
+          {NAV_LINKS.map(({ href, label }) => (
+            <a key={href} href={href} className={DESKTOP_LINK_CLASS}>
+              {label}
+            </a>
+          ))}
           <button
             onClick={onOpenGitHubHub}
             className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
@@ -55,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }
           </button>
         </nav>
 
-        {/* Zone 3: 1 Primary Action */}
+        {/* Zone 3: Primary Action (desktop) */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <button
             onClick={onOpenContact}
@@ -71,13 +65,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }
             onClick={onOpenGitHubHub}
             className="p-2 text-cyan-400 hover:text-white transition-colors"
             title="GitHub Setup"
+            aria-label="Open GitHub Push Hub"
           >
             <GitBranch className="w-5 h-5" />
           </button>
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMobileMenuOpen((open) => !open)}
             className="p-2 text-slate-300 hover:text-white focus:outline-none"
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -88,37 +84,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-800 bg-[#0c0f17] px-6 py-5">
           <nav className="flex flex-col gap-4 text-base font-medium text-slate-200">
-            <a
-              href="#projects"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-cyan-400"
-            >
-              Work & Projects
-            </a>
-            <a
-              href="#architecture"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-cyan-400"
-            >
-              Architecture & Stack
-            </a>
-            <a
-              href="#experience"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-cyan-400"
-            >
-              Experience
-            </a>
-            <a
-              href="#writings"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-cyan-400"
-            >
-              Writings
-            </a>
+            {NAV_LINKS.map(({ href, mobileLabel }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={closeMobileMenu}
+                className="py-1 hover:text-cyan-400"
+              >
+                {mobileLabel}
+              </a>
+            ))}
             <button
               onClick={() => {
-                setMobileMenuOpen(false);
+                closeMobileMenu();
                 onOpenGitHubHub();
               }}
               className="flex items-center gap-2 py-1 text-left text-cyan-400 font-semibold"
@@ -129,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenGitHubHub }
             <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
               <button
                 onClick={() => {
-                  setMobileMenuOpen(false);
+                  closeMobileMenu();
                   onOpenContact();
                 }}
                 className="w-full rounded-lg bg-cyan-500 py-2.5 text-center text-sm font-semibold text-slate-950"

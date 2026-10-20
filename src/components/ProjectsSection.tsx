@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { ArrowUpRight, Github, ExternalLink, Activity, Radio, Cpu, Layers } from 'lucide-react';
-import { PORTFOLIO_DATA, Project } from '../data/portfolioData';
+import { useMemo, useState } from 'react';
+import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
+import { PORTFOLIO_DATA, PROJECT_CATEGORIES, Project } from '../data/portfolioData';
+import { DotSeparatedList } from './ui/DotSeparatedList';
 
 interface ProjectsSectionProps {
   onSelectProject: (project: Project) => void;
 }
 
-export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onSelectProject }) => {
+export const ProjectsSection = ({ onSelectProject }: ProjectsSectionProps) => { = ({ onSelectProject }) => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const { projects } = PORTFOLIO_DATA;
 
-  const categories = ['All', 'Distributed Systems', 'Cloud & Infra', 'Full-Stack Web'];
+  const categories = ['All', ...PROJECT_CATEGORIES] as const;
 
-  const filteredProjects =
-    activeCategory === 'All'
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
+  const filteredProjects = useMemo(
+    () =>
+      activeCategory === 'All'
+        ? projects
+        : projects.filter((p) => p.category === activeCategory),
+    [activeCategory, projects],
+  );
 
   return (
     <section id="projects" className="py-20 border-b border-slate-800/80">
@@ -118,16 +122,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onSelectProjec
 
                   {/* Unboxed Tech Stack and Links (Zero-pill discipline) */}
                   <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between gap-4">
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 font-mono">
-                      {project.techStack.slice(0, 4).map((tech, tIdx) => (
-                        <React.Fragment key={tIdx}>
-                          <span>{tech}</span>
-                          {tIdx < Math.min(project.techStack.length, 4) - 1 && (
-                            <span className="text-slate-600" aria-hidden="true">·</span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
+                    <DotSeparatedList
+                      items={project.techStack}
+                      limit={4}
+                      className="flex flex-wrap items-center gap-2 text-xs text-slate-400 font-mono"
+                    />
 
                     <div className="flex items-center gap-2 shrink-0">
                       <a

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { BookOpen, ArrowUpRight, X } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { PORTFOLIO_DATA, Article } from '../data/portfolioData';
+import { ModalOverlay, ModalCloseButton } from './ui/ModalOverlay';
 
-export const ArticlesSection: React.FC = () => {
+export const ArticlesSection = () => {
   const { articles } = PORTFOLIO_DATA;
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+
+  const closeArticle = useCallback(() => setSelectedArticle(null), []);
 
   return (
     <section id="writings" className="py-20 border-b border-slate-800/80">
@@ -61,19 +64,14 @@ export const ArticlesSection: React.FC = () => {
       </div>
 
       {/* Article Reader Modal */}
-      {selectedArticle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div
-            className="relative w-full max-w-2xl rounded-2xl border border-slate-800 bg-[#0e121c] text-slate-100 shadow-2xl p-6 sm:p-8 my-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedArticle(null)}
-              className="absolute top-5 right-5 rounded-full bg-slate-900/80 p-2 text-slate-300 hover:text-white border border-slate-700/60 transition-colors cursor-pointer"
-              aria-label="Close modal"
-            >
-              <X className="w-4 h-4" />
-            </button>
+      <ModalOverlay
+        isOpen={selectedArticle !== null}
+        onClose={closeArticle}
+        panelClassName="max-w-2xl p-6 sm:p-8"
+      >
+        {selectedArticle && (
+          <>
+            <ModalCloseButton onClose={closeArticle} />
 
             {/* Unboxed Metadata */}
             <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
@@ -89,23 +87,23 @@ export const ArticlesSection: React.FC = () => {
             </h2>
 
             <div className="space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
-              {selectedArticle.content.map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
+              {selectedArticle.content.map((paragraph) => (
+                <p key={paragraph.slice(0, 32)}>{paragraph}</p>
               ))}
             </div>
 
             <div className="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-400 font-mono">By Benjamin Boma</span>
               <button
-                onClick={() => setSelectedArticle(null)}
+                onClick={closeArticle}
                 className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors cursor-pointer"
               >
                 Close
               </button>
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </ModalOverlay>
     </section>
   );
 };

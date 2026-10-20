@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowDown, Github, ArrowUpRight, Terminal, FileText, CheckCircle2 } from 'lucide-react';
+import type { FC } from 'react';
+import { ArrowDown, Terminal, FileText } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 
 interface HeroProps {
@@ -8,7 +8,7 @@ interface HeroProps {
   onOpenResume: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenGitHubHub, onOpenResume }) => {
+export const Hero: FC<HeroProps> = ({ onOpenContact, onOpenGitHubHub, onOpenResume }) => {
   const { profile } = PORTFOLIO_DATA;
 
   return (

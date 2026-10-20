@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Sliders, Cpu, Server, Network, Database, ShieldCheck, Zap, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { Sliders, Zap } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { DotSeparatedList } from './ui/DotSeparatedList';
 
-export const ArchitectureMatrix: React.FC = () => {
+export const ArchitectureMatrix = () => {
   const { architectureSkills } = PORTFOLIO_DATA;
   const [trafficRate, setTrafficRate] = useState<number>(25000);
   const [cacheMode, setCacheMode] = useState<'hot' | 'warm'>('hot');
@@ -50,18 +51,12 @@ export const ArchitectureMatrix: React.FC = () => {
               </p>
 
               {/* Unboxed skill list with typographic dots */}
-              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-slate-300">
-                {domain.skills.map((skill, sIdx) => (
-                  <React.Fragment key={sIdx}>
-                    <span className="text-slate-200 hover:text-cyan-400 transition-colors">
-                      {skill}
-                    </span>
-                    {sIdx < domain.skills.length - 1 && (
-                      <span className="text-slate-600" aria-hidden="true">/</span>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
+              <DotSeparatedList
+                items={domain.skills}
+                separator="/"
+                itemClassName="text-slate-200 hover:text-cyan-400 transition-colors"
+                className="flex flex-wrap items-center gap-2 text-xs font-mono text-slate-300"
+              />
             </div>
           ))}
         </div>
